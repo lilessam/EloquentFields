@@ -61,24 +61,31 @@ So this actually will generate an update form fields for the row which its id is
 
 If the `input` index is `input` you must provide a `type` index to provide the input type like `text` or `number` or `date` etc.
 
-If the `input` type is `select` you must can provide an `options` index which will contain an array for the select dropdown options. Or you can provide a `relation` index which will get options from a relation in the eloquent model.
+If the `input` type is `select` you can provide an `options` index which will contain an array for the select dropdown options. Or you can provide a `relation` index which will get options from a relation in the eloquent model.
 
 ##### Relation array
 There's three types of Eloquent Relatioships supported till now in the package. You have to provide a `type` index in the relation array to specify the relation type based on the following:
 1. `belongsTo`: its type will be `one` because we will only select one option in this case.
 2. `hasMany` Or `belongsToMany`: their type will be `many` because we will select multiple values.
 
-If the `type` index in the relation array is `one` you will need to provide `model` index which will be the relational mode, `column` which is the foreign key, `selectFrom` which will be the column we need to display in the option from the relation model, `valueFrom` which will be the column from the relational model that will be the value of the option of the select dropdown.
+If the `type` index in the relation array is `one` you will need to provide
+* `model` index which will be the relation model.
+* `column` which is the foreign key.
+* `selectFrom` which will be the column we need to display in the option from the relation model.
+* `valueFrom` which will be the column from the relational model that will be the value of the option of the select dropdown.
 
-If the `type` index in the relation array is `many` you will need to provide a `name` index which will be the name of the relation. For example if my model is `User` and it has many `Role` so the name of the relation will be `roles` or whatever the name of the relation you created in the `User` model. You will also need to provide a `selectFrom` and `valueFrom` as well.
+If the `type` index in the relation array is `many` you will need to provide 
+* `name` index which will be the name of the relation. For example if my model is `User` and it has many `Role` so the name of the relation will be `roles` or whatever the name of the relation you created in the `User` model.
+
+You will also need to provide a `selectFrom` and `valueFrom` as well.
 
 ##### Additional Preferences
 There are multiple additional things that can be very usefull in all your fields specifications.
-1. `label_classes`: which is the label class attribute value. You can override the default classes which are `control-label col-md-4`.'
-2. `input_div_classes`: which is the class attribute of the div that contains the input code. By default it's `col-md-6`.
-3. `input_classes`: which is the class attribute of the input itself. By default it's `form-control`.
-4. `input_id`: which is the id attribute of the input itself. By default it's the field name.
-5. `inject_attributes`: which allows you to add additional attributes to the input. It just takes the string and put it in the input tag.
+1. `label_classes` which is the label class attribute value. You can override the default classes which are `control-label col-md-4`.
+2. `input_div_classes` which is the class attribute of the div that contains the input code. By default it's `col-md-6`.
+3. `input_classes`:which is the class attribute of the input itself. By default it's `form-control`.
+4. `input_id` which is the id attribute of the input itself. By default it's the field name.
+5. `inject_attributes` which allows you to add additional attributes to the input. It just takes the string and put it in the input tag.
 
 
 #### Examples.
@@ -125,6 +132,7 @@ What if the model belongs to many roles?
         'selectFrom' => 'name',
         'valueFrom' => 'id'
     ],
+    'inject_attributes' => 'multiple'
 ],
 ```
 
