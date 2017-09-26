@@ -1,0 +1,22 @@
+{
+    "name": "lilessam/eloquent-fields",
+    "description": "Simple eloquent model fields generator package for Laravel 5.5",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ahmed Essam",
+            "email": "erwinchafros@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "illuminate/support": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lilessam\\EloquentFields\\": "src/"
+        },
+        "files": ["src/helpers.php"]
+    },
+    "minimum-stability": "stable"
+}
