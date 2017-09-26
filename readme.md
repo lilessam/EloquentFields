@@ -65,7 +65,7 @@ If the `input` type is `select` you can provide an `options` index which will co
 
 ##### Relation array
 There's three types of Eloquent Relatioships supported till now in the package. You have to provide a `type` index in the relation array to specify the relation type based on the following:
-1. `belongsTo`: its type will be `one` because we will only select one option in this case.
+1. `belongsTo` its type will be `one` because we will only select one option in this case.
 2. `hasMany` Or `belongsToMany`: their type will be `many` because we will select multiple values.
 
 If the `type` index in the relation array is `one` you will need to provide
@@ -168,6 +168,7 @@ class User extends Model
                 'selectFrom' => 'name',
                 'valueFrom'  => 'id',
             ],
+            'inject_attributes' => 'multiple'
         ],
     ];
 
