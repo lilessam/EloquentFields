@@ -288,9 +288,7 @@ trait FormGenerator
         $injectAttributes = isset($props['inject_attributes']) ? $inject_attributes : '';
 
         // Basice input code
-        $inputCode = "
-    			<textarea class='$inputClasses' name='$key' id='$inputId' $injectAttributes>
-    			";
+        $inputCode = "<textarea class='$inputClasses' name='$key' id='$inputId' $injectAttributes>";
 
         // If it's an update input
         if ($current != null) {
