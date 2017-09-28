@@ -3,6 +3,8 @@ namespace Lilessam\EloquentFields\Traits;
 
 trait FormGenerator
 {
+    protected static $initialInput           = 'input';
+    protected static $initialInputType       = 'text';
     protected static $initialLabelClasses    = 'control-label col-md-4';
     protected static $initialInputDivClasses = 'col-md-6';
     protected static $initialInputClasses    = 'form-control';
@@ -92,11 +94,18 @@ trait FormGenerator
      */
     public static function generateFieldCode(string $key, array $props, $current = null): string
     {
+
         // Initiate code varaible
         $fieldCode = '';
 
         // Extract props
         extract($props);
+
+        // It there's not input provided so it will be the
+        // initial one
+        if (!isset($props['input'])) {
+            $input = static::$initialInput;
+        }
 
         switch ($input) {
 
@@ -140,6 +149,12 @@ trait FormGenerator
         if (isset($props['input_id'])) {
 
             $inputId = $input_id;
+        }
+
+        // If there's no type provided the input type will be
+        // the initial one.
+        if (!isset($props['type'])) {
+            $type = static::$initialInputType;
         }
 
         // if there's an inject_attributes
