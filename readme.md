@@ -123,11 +123,12 @@ If the model belongs to a role and we wanna make a select field for the roles.
 ```
 What if the model belongs to many roles?
 ```PHP
-'roles' => [
+'roles[]' => [
     'label'    => 'Roles',
     'input'    => 'select',
     'relation' => [
         'name' => 'roles',
+        'model' => 'App\Role',
         'type' => 'many',
         'selectFrom' => 'name',
         'valueFrom' => 'id'
