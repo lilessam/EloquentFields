@@ -160,11 +160,12 @@ class User extends Model
             'input' => 'input',
             'type'  => 'number',
         ],
-        'roles' => [
+        'roles[]' => [
             'label'    => 'Roles',
             'input'    => 'select',
             'relation' => [
                 'name'       => 'roles',
+                'model'      => 'App\Role',
                 'type'       => 'many',
                 'selectFrom' => 'name',
                 'valueFrom'  => 'id',
