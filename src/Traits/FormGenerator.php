@@ -166,7 +166,8 @@ trait FormGenerator
     			<input type='$type' class='$inputClasses' name='$key' id='$inputId' $injectAttributes 
     			";
         
-        $value = isset($props['value']) ? eval('return ' . $props['value'] . ';') : $current->{$key};
+        $value = isset($current) ? $current->{$key} : '';
+        $value = isset($props['value']) ? eval('return ' . $props['value'] . ';') : $value;
 
         // If it's an update input
         if ($current != null) {
