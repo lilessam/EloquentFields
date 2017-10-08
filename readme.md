@@ -195,6 +195,18 @@ public static $fields = [
         'inject_attributes' => 'multiple'
     ],
 ];
+
+public function getExceptionsValues()
+{
+    $results = [];
+    $exception_ids = $this->exception_ids ? json_decode($this->exception_ids) : [];
+    foreach ($exception_ids as $exception_id) {
+        $product = Product::find($exception_id);
+        $results[] = $product;
+    }
+
+    return ['all' => Product::latest()->get(), 'selected' => $results];
+}
 ```
 
 Then you can just call `generate_fields('App\User')` to generate a creation form fields or `generate_fields('App\User', 1)` to generate an update form fields for User whose id is 1.
