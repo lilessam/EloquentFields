@@ -79,6 +79,8 @@ If the `type` index in the relation array is `many` you will need to provide
 
 You will also need to provide a `selectFrom` and `valueFrom` as well.
 
+If the input is a `select` you can provide a `valueCallback` which will be a method in your model returns array with two indexes. One is `all` which will be all the options records. The second is `selected` which will be an array has all selected collections.
+
 ##### Additional Preferences
 There are multiple additional things that can be very usefull in all your fields specifications.
 1. `label_classes` which is the label class attribute value. You can override the default classes which are `control-label col-md-4`.
@@ -179,6 +181,20 @@ class User extends Model
         return $this->belongsToMany('App\Role');
     }
 }
+```
+
+Example for valueCallbacks.
+```PHP
+public static $fields = [
+    'exception_ids[]' => [
+        'label' => 'المنتجات المستثناة',
+        'input' => 'select',
+        'valueCallback' => 'getExceptionsValues',
+        'selectFrom' => 'name_ar',
+        'valueFrom' => 'id',
+        'inject_attributes' => 'multiple'
+    ],
+];
 ```
 
 Then you can just call `generate_fields('App\User')` to generate a creation form fields or `generate_fields('App\User', 1)` to generate an update form fields for User whose id is 1.

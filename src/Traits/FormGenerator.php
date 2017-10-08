@@ -258,6 +258,29 @@ trait FormGenerator
     		}
 
     	}
+
+        // If there's a valueCallback function
+        if (isset($valueCallback)) {
+
+            // Get All records
+            $allRecords = call_user_func([$current, $valueCallback]);
+
+            // All options records loop
+            foreach ($allRecords['all'] as $record) {
+
+                $ifSelected = '';
+                
+                // Selected ids
+                $selected_ids = collect($allRecords['selected'])->pluck('id')->all();
+
+                if (in_array($record->id, $selected_ids)) {
+                    $ifSelected = "selected='selected'";
+                }
+                // Concat the option code
+                $optionsCode .= "<option value='".$record->{$valueFrom}."' $ifSelected>".$record->{$selectFrom}."</option>";
+            }
+        }
+
         if (isset($options)) {
 
     		// If there is static options
