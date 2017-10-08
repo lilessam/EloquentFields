@@ -79,7 +79,7 @@ If the `type` index in the relation array is `many` you will need to provide
 
 You will also need to provide a `selectFrom` and `valueFrom` as well.
 
-If the input is a `select` you can provide a `valueCallback` which will be a method in your model returns array with two indexes. One is `all` which will be all the options records. The second is `selected` which will be an array has all selected collections.
+If the input is a `select` you can provide a `valueFallback` which will be a static method returns all the options in the dropdown and then you need to provide a `valueCallback` which will return the selected options collection.
 
 ##### Additional Preferences
 There are multiple additional things that can be very usefull in all your fields specifications.
@@ -183,13 +183,14 @@ class User extends Model
 }
 ```
 
-Example for valueCallbacks.
+Example for valueCallbacks and valueFallbacks.
 ```PHP
 public static $fields = [
     'exception_ids[]' => [
         'label' => 'المنتجات المستثناة',
         'input' => 'select',
         'valueCallback' => 'getExceptionsValues',
+        'valueFallback' => 'getAllProducts',
         'selectFrom' => 'name_ar',
         'valueFrom' => 'id',
         'inject_attributes' => 'multiple'
@@ -205,7 +206,12 @@ public function getExceptionsValues()
         $results[] = $product;
     }
 
-    return ['all' => Product::latest()->get(), 'selected' => $results];
+    return $results;
+}
+
+public static function getAllProducts()
+{
+    return Product::latest()->get();
 }
 ```
 
