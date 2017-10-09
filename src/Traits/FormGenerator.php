@@ -168,8 +168,11 @@ trait FormGenerator
 
         // If it's an update input
         if ($current != null) {
+            
+            $value = isset($valueCallback) ? call_user_func([$current, $valueCallback]) : $current->{$key};
             // Then add the value
-            $inputCode .= " value='" . $current->{$key} . "'";
+            $inputCode .= " value='" . $value . "'";
+
         }
         $inputCode .= "/>";
 
