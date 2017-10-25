@@ -215,6 +215,64 @@ public static function getAllProducts()
 }
 ```
 
+Example for manual `belongsTo` relation with createValueCallbacks and updateValueFallbacks.
+```PHP
+/**
+* The attributes that are building the model forms.
+* 
+* @var array
+*/
+public static $fields = [
+    'name_ar' => [
+        'label' => 'الاسم بالعربية',
+    ],
+    'name_en' => [
+        'label' => 'الاسم بالإنجليزية',
+    ],
+    'category_id' => [
+        'label' => 'التصنيف الأساسي',
+        'input' => 'select',
+        'options' => [
+            '' => 'لا تصنيف',
+        ],
+        'selectFrom' => 'name_ar',
+        'valueFrom' => 'id',
+        'valueCallback' => 'getCurrentValue', // Can be replaced with 'column' => 'category_id' for belongsTo relation
+        'updateValueFallback' => 'getUpdateCategories',
+        'createValueFallback' => 'getAllCategories',
+    ],
+];
+
+/**
+ * Get dropdown categories for EloquentFields.
+ * 
+ * @return self
+*/
+public function getUpdateCategories()
+{
+    return static::where('id', '!=', $this->id)->get();
+}
+
+/**
+  * Get all dropdown categories for EloquentFields Creation.
+ * 
+ * @return self
+ */
+public static function getAllCategories()
+{
+    return static::latest()->get();
+}
+
+/**
+ * Get Current value for the manual relation.
+ * @return mixed
+ */
+public function getCurrentValue()
+{
+    return $this->category_id;
+}
+```
+
 Then you can just call `generate_fields('App\User')` to generate a creation form fields or `generate_fields('App\User', 1)` to generate an update form fields for User whose id is 1.
 
 Notice that you can pass a third parameter to `generate_fields` parameter to except one or many fields from being generated in the form.

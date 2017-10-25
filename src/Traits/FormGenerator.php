@@ -72,7 +72,7 @@ trait FormGenerator
 
             // Concat the field code
             $formCode .= "
-    		<div class='form-group'>
+            <div class='form-group'>
                 <label for='$key' class='$labelClasses'>$label</label>
                 <div class='".$inputDivClasses."'>
                 $inputsCode
@@ -136,7 +136,7 @@ trait FormGenerator
         $inputClasses = static::$initialInputClasses;
         $inputId = $key;
 
-    	// Extract props
+        // Extract props
         extract($props);
 
         // If there's a custom input tag classes
@@ -163,8 +163,8 @@ trait FormGenerator
 
         // Basice input code
         $inputCode = "
-    			<input type='$type' class='$inputClasses' name='$key' id='$inputId' $injectAttributes 
-    			";
+                <input type='$type' class='$inputClasses' name='$key' id='$inputId' $injectAttributes 
+                ";
 
         // If it's an update input
         if ($current != null) {
@@ -188,7 +188,7 @@ trait FormGenerator
      */
     public static function generateSelectCode(string $key, array $props, $current): string
     {
-    	$inputClasses = static::$initialInputClasses;
+        $inputClasses = static::$initialInputClasses;
         $inputId = $key;
 
         // Extract props
@@ -209,13 +209,13 @@ trait FormGenerator
         // if there's an inject_attributes
         $injectAttributes = isset($props['inject_attributes']) ? $inject_attributes : '';
 
-    	// Basic select code
-    	$selectCode = "
-    	        <select class='$inputClasses' name='$key' id='$inputId' $injectAttributes>
-    	";
+        // Basic select code
+        $selectCode = "
+                <select class='$inputClasses' name='$key' id='$inputId' $injectAttributes>
+        ";
 
-    	// Initiate options code
-    	$optionsCode = '';
+        // Initiate options code
+        $optionsCode = '';
 
         if (isset($options)) {
 
@@ -227,12 +227,12 @@ trait FormGenerator
 
         }
 
-    	// It there's a relation key in props
-    	// we wil lget the select options from this relation.
-    	if (isset($relation)) {
+        // It there's a relation key in props
+        // we wil lget the select options from this relation.
+        if (isset($relation)) {
 
-    		// Initiate relation records query
-    		$allRecordsQuery = call_user_func($relation['model'] .'::latest');
+            // Initiate relation records query
+            $allRecordsQuery = call_user_func($relation['model'] .'::latest');
 
             // If there's a scope
             if (isset($relation['scope'])) {
@@ -242,18 +242,18 @@ trait FormGenerator
             // Get the records
             $allRecords = $allRecordsQuery->get();
 
-    		foreach ($allRecords as $record) {
+            foreach ($allRecords as $record) {
 
-    			// Initiate if selected variable
-    			$ifSelected = '';
+                // Initiate if selected variable
+                $ifSelected = '';
 
-    			// If it's an update select field
-    			if ($current != null) {
+                // If it's an update select field
+                if ($current != null) {
                     // BelongsTo Relation 
                     if ($relation['type'] == 'one') {
                         if ($current->{$relation['column']} == $record->id) {
-    					       $ifSelected = "selected='selected'";
-    				    }
+                               $ifSelected = "selected='selected'";
+                        }
                     // Has Many or Belongs To Many
                     } elseif ($relation['type'] == 'many') {
                         $relatedIDs = $current->{$relation['name']}()->pluck('id')->toArray();
@@ -262,21 +262,28 @@ trait FormGenerator
                             $ifSelected = "selected='selected'";
                         }
                     }
-    			}
+                }
 
-    			// Concat the option code
-    			$optionsCode .= "<option value='".$record->{$relation['valueFrom']}."' $ifSelected>"
-    							.$record->{$relation['selectFrom']}
-    							."</option>";
-    		}
+                // Concat the option code
+                $optionsCode .= "<option value='".$record->{$relation['valueFrom']}."' $ifSelected>"
+                                .$record->{$relation['selectFrom']}
+                                ."</option>";
+            }
 
-    	}
+        }
 
         // If there's a valueCallback function
-        if (isset($valueCallback)) {
+        if (isset($valueCallback) || isset($updateValueFallback) || isset($createValueFallback)) {
+            //dd($current->getCategoriesExceptMe());
 
             // Get All records
-            $allRecords = is_string($valueFallback) ? call_user_func(get_class($current).'::'.$valueFallback) : $valueFallback;
+            if (isset($updateValueFallback) || isset($createValueFallback)) {
+                $function = isset($current) ? call_user_func(array($current, $updateValueFallback)) :
+                call_user_func(get_class($current).'::'.$createValueFallback);
+            } else {
+                $function = is_string($valueFallback) ? call_user_func(get_class($current).'::'.$valueFallback) : $valueFallback;
+            }
+            $allRecords = $function;
 
             // All options records loop
             foreach ($allRecords as $record) {
@@ -286,22 +293,29 @@ trait FormGenerator
                 if (isset($current)) {
                 
                     // Selected ids
-                    $selected_ids = collect(call_user_func([$current, $valueCallback]))->pluck($valueFrom)->all();
+                    // If it's a normal callbacks
+                    if (!isset($updateValueFallback)) {
+                        $selected_ids = collect(call_user_func([$current, $valueCallback]))->pluck($valueFrom)->all();
+
+                    // If there's createValue and updateValue so it's manual relation
+                    } else {
+                        $selected_ids = isset($valueCallback) ? collect(call_user_func([$current, $valueCallback]))->all() : (array) $current->{$column};
+                    }
 
                     if (in_array($record->{$valueFrom}, $selected_ids)) {
                         $ifSelected = "selected='selected'";
-                    }
+                    }       
                 }
                 // Concat the option code
                 $optionsCode .= "<option value='".$record->{$valueFrom}."' $ifSelected>".$record->{$selectFrom}."</option>";
             }
         }
 
-    	$selectCode .= $optionsCode;
+        $selectCode .= $optionsCode;
 
-    	$selectCode .= "</select>";
+        $selectCode .= "</select>";
 
-    	return $selectCode;
+        return $selectCode;
     }
 
     /**
@@ -313,7 +327,7 @@ trait FormGenerator
      */
     public static function generateTextAreaCode(string $key, array $props, $current): string
     {
-    	$inputClasses = static::$initialInputClasses;
+        $inputClasses = static::$initialInputClasses;
         $inputId = $key;
 
         // Extract props
