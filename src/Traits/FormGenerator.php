@@ -217,6 +217,16 @@ trait FormGenerator
     	// Initiate options code
     	$optionsCode = '';
 
+        if (isset($options)) {
+
+            // If there is static options
+            foreach ($options as $value => $label) {
+
+                $optionsCode .= "<option value='$value'>$label</option>";
+            }
+
+        }
+
     	// It there's a relation key in props
     	// we wil lget the select options from this relation.
     	if (isset($relation)) {
@@ -286,16 +296,6 @@ trait FormGenerator
                 $optionsCode .= "<option value='".$record->{$valueFrom}."' $ifSelected>".$record->{$selectFrom}."</option>";
             }
         }
-
-        if (isset($options)) {
-
-    		// If there is static options
-    		foreach ($options as $value => $label) {
-
-    			$optionsCode .= "<option value='$value'>$label</option>";
-    		}
-
-    	}
 
     	$selectCode .= $optionsCode;
 
