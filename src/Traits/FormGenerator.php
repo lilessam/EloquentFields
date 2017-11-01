@@ -221,8 +221,14 @@ trait FormGenerator
 
             // If there is static options
             foreach ($options as $value => $label) {
+                $selected = '';
+                if (isset($current)) {
+                    if ($current->{$key} == $value) {
+                        $selected .= "selected='selected'";
+                    }
+                }
 
-                $optionsCode .= "<option value='$value'>$label</option>";
+                $optionsCode .= "<option value='$value' $selected>$label</option>";
             }
 
         }
