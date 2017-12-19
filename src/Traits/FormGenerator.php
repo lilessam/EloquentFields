@@ -70,9 +70,28 @@ trait FormGenerator
                 $inputDivClasses = $input_div_classes;
             }
 
+            $inputContainerId = '';
+            $inputContainerClasses = '';
+            $inputContainerAttributes = '';
+
+            if (isset($props['input_container_id'])) {
+
+                $inputContainerId = $input_container_id;
+            }
+
+            if (isset($props['input_container_classes'])) {
+
+                $inputContainerClasses = $input_container_classes;
+            }
+
+            if (isset($props['input_container_attributes'])) {
+
+                $inputContainerAttributes = $input_container_attributes;
+            }
+
             // Concat the field code
             $formCode .= "
-            <div class='form-group'>
+            <div class='form-group' id='$inputContainerId' class='$inputContainerClasses' $inputContainerAttributes>
                 <label for='$key' class='$labelClasses'>$label</label>
                 <div class='".$inputDivClasses."'>
                 $inputsCode
